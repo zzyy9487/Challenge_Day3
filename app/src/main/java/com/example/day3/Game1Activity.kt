@@ -3,6 +3,7 @@ package com.example.day3
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.HandlerThread
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +36,8 @@ class Game1Activity : AppCompatActivity() {
     var name = ""
     var ansStatus:Int = 0
     lateinit var timer:Timer
+    lateinit var timer2:Timer
+    lateinit var handler:Handler
 
 //    private var repeatTaskTime:Long = 5000
 //    private var taskHandler = Handler()
@@ -129,9 +132,6 @@ class Game1Activity : AppCompatActivity() {
                             if (response.code() == 200) {
                                 val data = response.body()
                                 if (data != null) {
-                                    val nowtime = System.currentTimeMillis()/1000
-                                    val time = endtime - nowtime
-                                    textTime.text = time.toString()
                                     val list = data.players
                                     if (list == gamerData) {
                                     } else {
@@ -200,6 +200,38 @@ class Game1Activity : AppCompatActivity() {
             }
         }
         timer.schedule(timerTask, 2000, 2000)
+
+        timer2 = Timer(true)
+        val timerTask2: TimerTask = object : TimerTask() {
+            override fun run() {
+                this@Game1Activity.runOnUiThread{
+                    val nowtime = System.currentTimeMillis()/1000
+                    val time = endtime - nowtime
+                    if (time<0){this.cancel()}
+                    else{
+                        textTime.text = time.toString()
+                    }
+                }
+            }
+        }
+        timer2.schedule(timerTask2, 1000, 1000)
+
+
+//        val handlerthread:HandlerThread = HandlerThread("renewTime")
+//        handlerthread.start()
+//        handler = Handler(handlerthread.looper)
+//        val handleTime = Handler()
+//
+//
+//        handler.post{
+//            handleTime.post{
+//                val nowtime = System.currentTimeMillis()/1000
+//                val time = endtime - nowtime
+//                textTime.text = time.toString()
+//            }
+//        }
+
+
 
 //        val timer2 = Timer(true)
 //        val timerTask2: TimerTask = object : TimerTask() {
