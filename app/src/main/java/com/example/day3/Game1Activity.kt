@@ -34,6 +34,7 @@ class Game1Activity : AppCompatActivity() {
     var gamerData = mutableListOf<Players>()
     var name = ""
     var ansStatus:Int = 0
+    lateinit var timer:Timer
 
 //    private var repeatTaskTime:Long = 5000
 //    private var taskHandler = Handler()
@@ -111,7 +112,7 @@ class Game1Activity : AppCompatActivity() {
         })
 
 
-        val timer = Timer(true)
+        timer = Timer(true)
         val timerTask: TimerTask = object : TimerTask() {
             override fun run() {
                 if(ansStatus == 0){
@@ -200,30 +201,17 @@ class Game1Activity : AppCompatActivity() {
         }
         timer.schedule(timerTask, 2000, 2000)
 
-
 //        val timer2 = Timer(true)
 //        val timerTask2: TimerTask = object : TimerTask() {
 //            override fun run() {
-//                val nowtime = (System.currentTimeMillis()/1000).toInt()
-//                val show = endtime - nowtime
-//                textTime.text = show.toString()
+//                val nowtime = System.currentTimeMillis()/1000
+//                val time = endtime - nowtime
+//                textTime.text = time.toString()
 //            }
 //        }
-//        timer2.schedule(timerTask2, 0, 2000)
-
-
-
-
-
-
-
-
-
-
+//        timer2.schedule(timerTask2, 1000, 1000)
 
     }
-
-
 
 //    private fun upupdate() {
 //
@@ -266,8 +254,10 @@ class Game1Activity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        val intent = Intent(this@Game1Activity, MainActivity::class.java)
-        startActivity(intent)
+        super.onBackPressed()
+        timer.cancel()
+        shared.setPlayerId("")
+        shared.setName("")
         this@Game1Activity.finish()
     }
 

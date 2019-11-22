@@ -24,6 +24,7 @@ class WaitActivity : AppCompatActivity() {
     var position = 2
     var name = ""
     var nameList = mutableListOf<Wait>()
+    lateinit var timer:Timer
 //    var calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +87,7 @@ class WaitActivity : AppCompatActivity() {
 
 
 
-        val timer = Timer(true)
+        timer = Timer(true)
         val timerTask: TimerTask = object : TimerTask() {
             override fun run() {
                 val apiInterface2 = retrofit.create(APIInterface::class.java)
@@ -163,18 +164,14 @@ class WaitActivity : AppCompatActivity() {
 
 
 
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        timer.cancel()
+        shared.setPlayerId("")
+        shared.setName("")
+        this@WaitActivity.finish()
     }
 
 }
